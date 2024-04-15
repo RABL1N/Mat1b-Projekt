@@ -7,6 +7,7 @@ print("Hello wold")
 1+1==41
 
 
+gg
 
 def puzzle1():
     pass
