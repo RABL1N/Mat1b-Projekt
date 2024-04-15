@@ -1,9 +1,13 @@
+from sympy import *
+init_printing()
+
 def puzzle1():
     # Opg 2 og 3
     A = Matrix([[1, 1, 0, 0],[0, 0, 1, 1],[1, 0, 1, 0],[0, 1, 0, 1]])
     b = Matrix([5, 2, 3, 4])
     A,b
-    linsolve((A,b)), A, b
+    return(linsolve((A,b)))
+print(puzzle1())
 
 
 def puzzle2_figur3():
