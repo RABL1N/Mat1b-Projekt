@@ -24,3 +24,14 @@ def puzzle2_figur4():
                 [0,1,0,0,0,1,0,0,0],[1,0,0,0,1,0,0,0,1],[0,0,0,1,0,0,0,1,0]]) # Bund højre fra top til bund
     b = Matrix([5,3,5,2,3,8,2,3,4,3,4,3])
     linsolve((A,b)), A, b
+
+def opgave7_1():
+    # Opg 7
+    mu, I, x = symbols("mu I x")
+    mu = Function("mu")(x)
+    I = Function("I")(x)
+
+    diffeq = Eq(mu*I, diff(I))
+    #display(diffeq)
+    return dsolve(diffeq)
+print(opgave7_1())
