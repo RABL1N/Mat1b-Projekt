@@ -33,3 +33,5 @@ def opgave7_1():
 
     return dsolve(diffeq)
 print(opgave7_1())
+
+print("hello world")
