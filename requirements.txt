@@ -2,4 +2,3 @@ dtuimldmtools
 numpy
 sympy
 matplotlib
-certifi
