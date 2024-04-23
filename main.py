@@ -58,7 +58,7 @@ def f1(x, y):
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # Run the code/functions from here
     # print(opgave2())
     # print(opgave3())
     # print(opgave4())
