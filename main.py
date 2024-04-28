@@ -2,6 +2,9 @@
 from sympy import *
 init_printing()
 
+#init_printing(use_unicode=True)  # Gør output pænere med unicode-symboler
+
+
 #Opgave 12
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,7 +22,7 @@ def opgave3():
     # Figur 3
     A = Matrix([[1,1,1,0,0,0,0,0,0],[0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,1,1,1],[1,0,0,1,0,0,1,0,0],[0,1,0,0,1,0,0,1,0],[0,0,1,0,0,1,0,0,1]])
     b = Matrix([3,5,1,3,3,3])
-    linsolve((A,b)), A, b
+    return linsolve((A,b)), A, b
 
 def opgave4():
     # Figur 4
@@ -28,7 +31,7 @@ def opgave4():
                 [0,1,0,1,0,0,0,0,0],[0,0,1,0,1,0,1,0,0],[0,0,0,0,0,1,0,1,0], # Top højre fra top til bund 
                 [0,1,0,0,0,1,0,0,0],[1,0,0,0,1,0,0,0,1],[0,0,0,1,0,0,0,1,0]]) # Bund højre fra top til bund
     b = Matrix([5,3,5,2,3,8,2,3,4,3,4,3])
-    linsolve((A,b)), A, b
+    return linsolve((A,b)), A, b
 
 def opgave7_1():
     # Opg 7
@@ -57,35 +60,58 @@ def f1(x, y):
     return np.where(r < 1, np.cos(np.pi / 2 * r), 0)
 
 
+def opgave29():
+    sol = opgave4()[1]
+
+    vertical = Matrix([sol.row(i) for i in range(0, 3)]) 
+
+    horizontal = Matrix([sol.row(i) for i in range(3, 6)]) 
+
+    left_diagonals = Matrix([sol.row(i) for i in range(6, 9)]) 
+
+    right_diagonals = Matrix([sol.row(i) for i in range(9, 12)]) 
+
+
+    A = Matrix([vertical,horizontal,left_diagonals*sqrt(2),right_diagonals*sqrt(2)])
+    b = Matrix([5,3,5,2,3,8,2*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2)])
+    return linsolve((A,b)), A, b
+
+
+
 
 if __name__ == "__main__": # Run the code/functions from here
-    # print(opgave2())
-    # print(opgave3())
-    # print(opgave4())
-    # print(opgave7_1())
-    # print(opgave10())
+
+    init_printing(use_unicode=True)  # Aktiver pæn printning
+
+    #---------------- Opgave 29 ----------------
+    
+    pretty_print(opgave29())
+
+
+
+
 
 
     #---------------- Opgave 12 ----------------
 
-    # Create a grid of x, y values
-    x = np.linspace(-1.5, 1.5, 400)
-    y = np.linspace(-1.5, 1.5, 400)
-    X, Y = np.meshgrid(x, y)
+    # # Create a grid of x, y values
+    # x = np.linspace(-1.5, 1.5, 400)
+    # y = np.linspace(-1.5, 1.5, 400)
+    # X, Y = np.meshgrid(x, y)
 
-    # Compute f1 on the grid
-    Z = f1(X, Y)
+    # # Compute f1 on the grid
+    # Z = f1(X, Y)
 
-    # Plot the surface
-    fig = plt.figure(figsize=(12, 8))
-    ax = fig.add_subplot(111, projection='3d')
-    surf = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
-    cbar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=10)
-    cbar.set_label('$f_1(x, y)$')
+    # # Plot the surface
+    # fig = plt.figure(figsize=(12, 8))
+    # ax = fig.add_subplot(111, projection='3d')
+    # surf = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
+    # cbar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=10)
+    # cbar.set_label('$f_1(x, y)$')
 
-    ax.set_xlabel('X axis')
-    ax.set_ylabel('Y axis')
-    ax.set_zlabel('Z axis')
-    ax.set_title('Plot of $f_1(x, y) = \\cos\\left(\\frac{\\pi}{2} \\sqrt{x^2 + y^2}\\right)$ if $x^2 + y^2 < 1$, else 0')
+    # ax.set_xlabel('X axis')
+    # ax.set_ylabel('Y axis')
+    # ax.set_zlabel('Z axis')
+    # ax.set_title('Plot of $f_1(x, y) = \\cos\\left(\\frac{\\pi}{2} \\sqrt{x^2 + y^2}\\right)$ if $x^2 + y^2 < 1$, else 0')
 
-    plt.show()
+    # plt.show()
