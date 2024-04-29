@@ -53,6 +53,25 @@ def opgave10():
     print(r_t)
 
 
+def opgave11():
+    # Symbolic expressions for a and b
+    a = -sqrt(3)/3
+    b = simplify(sqrt(3)/9)  # Assuming this is the exact form of b
+
+    # Coordinates of the point you're interested in
+    x1 = 0
+    y1 = 0
+
+    # Calculating rho symbolically
+    rho = abs(a*x1+b-y1)/sqrt(a**2+1)
+
+    # Simplifying rho
+    simplified_rho = simplify(rho)
+
+    # Display the result
+    print(simplified_rho)
+
+
 
 def f1(x, y):
     # Define the function f1 using numpy for handling vectorized operations over a grid
@@ -60,7 +79,7 @@ def f1(x, y):
     return np.where(r < 1, np.cos(np.pi / 2 * r), 0)
 
 
-def opgave29():
+def opgave29_1():
     sol = opgave4()[1]
 
     vertical = Matrix([sol.row(i) for i in range(0, 3)]) 
@@ -76,6 +95,54 @@ def opgave29():
     b = Matrix([5,3,5,2,3,8,2*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2)])
     return linsolve((A,b)), A, b
 
+def opgave29_2():
+    sol = opgave4()[1]
+
+    vertical = Matrix([sol.row(i) for i in range(0, 3)]) 
+
+    horizontal = Matrix([sol.row(i) for i in range(3, 6)]) 
+
+    left_diagonals = Matrix([sol.row(i) for i in range(6, 9)]) 
+
+    right_diagonals = Matrix([sol.row(i) for i in range(9, 12)]) 
+
+
+    A = Matrix([vertical,horizontal,left_diagonals*sqrt(2),right_diagonals*sqrt(2)])
+    b = Matrix([5,3,5,2,3,8,2,3,4,3,4,3])
+    return linsolve((A,b)), A, b
+
+def opgave29_3():
+    sol = opgave4()[1]
+
+    vertical = Matrix([sol.row(i) for i in range(0, 3)]) 
+
+    horizontal = Matrix([sol.row(i) for i in range(3, 6)]) 
+
+    left_diagonals = Matrix([sol.row(i) for i in range(6, 9)]) 
+
+    right_diagonals = Matrix([sol.row(i) for i in range(9, 12)]) 
+
+
+    A = Matrix([vertical,horizontal,left_diagonals,right_diagonals])
+    b = Matrix([5,3,5,2,3,8,2*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2),4*sqrt(2),3*sqrt(2)])
+    return linsolve((A,b)), A, b
+
+
+def opgave29_4():
+    sol = opgave4()[1]
+
+    vertical = Matrix([sol.row(i) for i in range(0, 3)]) 
+
+    horizontal = Matrix([sol.row(i) for i in range(3, 6)]) 
+
+    left_diagonals = Matrix([sol.row(i) for i in range(6, 9)]) 
+
+    right_diagonals = Matrix([sol.row(i) for i in range(9, 12)]) 
+
+
+    A = Matrix([vertical,horizontal,left_diagonals,right_diagonals])
+    b = Matrix([5,3,5,2,3,8,2,3,4,3,4,3])
+    return linsolve((A,b)), A, b
 
 
 
@@ -85,10 +152,14 @@ if __name__ == "__main__": # Run the code/functions from here
 
     #---------------- Opgave 29 ----------------
     
-    pretty_print(opgave29())
+    #pretty_print(opgave29())
+    pretty_print(opgave29_1())
 
 
+    
 
+    #---------------- Opgave 11 ----------------
+    #opgave11()
 
 
 
