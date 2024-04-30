@@ -146,9 +146,137 @@ def opgave29_4():
 
 
 
+def intersect_cell(i,j,a,N,rho,phi):
+
+    x0 = a-((2*a*(i))/N)
+    x1 = a-((2*a*(i))/N)+(2*a/N)
+    y0 = a-((2*a*(j))/N)
+    y1 = a-((2*a*(j))/N)+(2*a/N)
+
+    x,y= symbols("x,y")
+    eq = Eq(x*cos(phi)+y*sin(phi),rho)
+    eq
+
+    #return (x0,y0),(x1,y1)
+
+    left = False
+    right = False
+    top = False
+    bottom = False
+    diagonal = False
+
+    #left
+    if (y0 < solve(eq,y)[0].subs({x:x0}) < y1):
+        left = True
+        
+    #right
+    if (y0 < solve(eq,y)[0].subs({x:x1}) < y1):
+        right = True
+        
+    #top
+    if (x0 < solve(eq,x)[0].subs({y:y1}) < x1):
+        top = True
+        
+    #bottom
+    if (x0 < solve(eq,x)[0].subs({y:y0}) < x1):
+        bottom = True
+
+    #diagonals
+    if rho == 0 and (phi == 3*pi/4 or phi == 7*pi/4):
+        diagonal = True
+    
+    return left, right, top, bottom, diagonal
+    
+    
+
+def get_length(i, j, a, N, rho, phi):
+
+    x,y= symbols("x,y")
+    eq = Eq(x*cos(phi)+y*sin(phi),rho)
+
+    x0 = a-((2*a*(i))/N)
+    x1 = a-((2*a*(i))/N)+(2*a/N)
+    y0 = a-((2*a*(j))/N)
+    y1 = a-((2*a*(j))/N)+(2*a/N)
+
+    # left intersection
+    vy = solve(eq,y)[0].subs({x:x0})
+    vx = x0
+    
+    # right intersection
+    hy = solve(eq,y)[0].subs({x:x1})
+    hx = x1
+    
+    # top intersection
+    tx = solve(eq,x)[0].subs({y:y1})
+    ty = y1
+
+    # bottom intersection
+    bx = solve(eq,x)[0].subs({y:y0})
+    by = y0
+
+    index = intersect_cell(i, j, a, N, rho, phi)
+
+    if index[0] and index[1]:
+        print("left and right")
+        vh = sqrt((hx-vx)**2+(hy-vy)**2)
+        return vh
+
+    if index[0] and index[2]:
+        print("left and top")
+        vt = sqrt((vx-tx)**2+(vy-ty)**2)
+        return vt
+    
+    if index[0] and index[3]:
+        print("left and bottom")
+        vb = sqrt((vx-bx)**2+(vy-by)**2)
+        return vb
+
+    if index[1] and index[2]:
+        print("right and top")
+        th = sqrt((tx-hx)**2+(ty-hy))
+        return th
+
+    if index[1] and index[3]:
+        print("right and bottom")
+        bh = sqrt((bx-hx)**2+(by-hy)**2)
+        return bh
+
+    if index[2] and index[3]:
+        print("top and bottom")
+        tb = sqrt((tx-bx)**2+(ty-by)**2)
+        return tb
+
+    if index[4]:
+        print("diagonal")
+        q0q1 = sqrt((x1-x0)**2+(y1-y0)**2)
+        return q0q1
+    
+def construct_A(a, N, rho_list, phi_list):
+    grid_size = (2*a)**2
+    cell_amount = N**2
+    cell_area = (2*a/N)**2 #area
+    cell_length = (2*a/N)
+    print(cell_length)
+
+    #for cell in cell_amount:
+
+
+
+
+
 if __name__ == "__main__": # Run the code/functions from here
 
     init_printing(use_unicode=True)  # Aktiver pæn printning
+
+    #print(intersect_cell(2,2,2,4,0,pi/4))
+
+    #print(get_length(2,2,2,4,0,3*pi/4))
+
+
+    construct_A(2, 3, [0.1,0.2,0.3], [pi/2,3*pi/2,5*pi/2])
+
+
 
     #---------------- Opgave 29 ----------------
     
