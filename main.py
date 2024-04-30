@@ -153,8 +153,7 @@ if __name__ == "__main__": # Run the code/functions from here
     #---------------- Opgave 29 ----------------
     
     #pretty_print(opgave29())
-    pretty_print(opgave29_1())
-
+    #pretty_print(opgave29_1())
 
     
 
