@@ -165,20 +165,21 @@ def intersect_cell(i,j,a,N,rho,phi):
     bottom = False
     diagonal = False
 
+    
     #left
-    if (y0 < solve(eq,y)[0].subs({x:x0}) < y1):
+    if (len(solve(eq,y))!=0) and (y0 < solve(eq,y)[0].subs({x:x0}) < y1):
         left = True
-        
+
     #right
-    if (y0 < solve(eq,y)[0].subs({x:x1}) < y1):
+    if (len(solve(eq,y))!=0) and (y0 < solve(eq,y)[0].subs({x:x1}) < y1):
         right = True
         
     #top
-    if (x0 < solve(eq,x)[0].subs({y:y1}) < x1):
+    if (len(solve(eq,x))!=0) and (x0 < solve(eq,x)[0].subs({y:y1}) < x1):
         top = True
         
     #bottom
-    if (x0 < solve(eq,x)[0].subs({y:y0}) < x1):
+    if (len(solve(eq,x))!=0) and (x0 < solve(eq,x)[0].subs({y:y0}) < x1):
         bottom = True
 
     #diagonals
@@ -199,67 +200,80 @@ def get_length(i, j, a, N, rho, phi):
     y0 = a-((2*a*(j))/N)
     y1 = a-((2*a*(j))/N)+(2*a/N)
 
-    # left intersection
-    vy = solve(eq,y)[0].subs({x:x0})
-    vx = x0
-    
-    # right intersection
-    hy = solve(eq,y)[0].subs({x:x1})
-    hx = x1
-    
-    # top intersection
-    tx = solve(eq,x)[0].subs({y:y1})
-    ty = y1
+    if (len(solve(eq,y))!=0):
+        # left intersection
+        vy = solve(eq,y)[0].subs({x:x0})
+        vx = x0
+        
+        # right intersection
+        hy = solve(eq,y)[0].subs({x:x1})
+        hx = x1
 
-    # bottom intersection
-    bx = solve(eq,x)[0].subs({y:y0})
-    by = y0
+    if (len(solve(eq,x))!=0):
+        # top intersection
+        tx = solve(eq,x)[0].subs({y:y1})
+        ty = y1
+
+        # bottom intersection
+        bx = solve(eq,x)[0].subs({y:y0})
+        by = y0
 
     index = intersect_cell(i, j, a, N, rho, phi)
 
     if index[0] and index[1]:
-        print("left and right")
-        vh = sqrt((hx-vx)**2+(hy-vy)**2)
+        #print("left and right")
+        vh = sqrt((vx-hx)**2+(vy-hy)**2)
         return vh
 
     if index[0] and index[2]:
-        print("left and top")
+        #print("left and top")
         vt = sqrt((vx-tx)**2+(vy-ty)**2)
         return vt
     
     if index[0] and index[3]:
-        print("left and bottom")
+        #print("left and bottom")
         vb = sqrt((vx-bx)**2+(vy-by)**2)
         return vb
 
     if index[1] and index[2]:
-        print("right and top")
-        th = sqrt((tx-hx)**2+(ty-hy))
+        #print("right and top")
+        th = sqrt((tx-hx)**2+(ty-hy)**2)
         return th
 
     if index[1] and index[3]:
-        print("right and bottom")
+        #print("right and bottom")
         bh = sqrt((bx-hx)**2+(by-hy)**2)
         return bh
 
     if index[2] and index[3]:
-        print("top and bottom")
+        #print("top and bottom")
         tb = sqrt((tx-bx)**2+(ty-by)**2)
         return tb
 
     if index[4]:
-        print("diagonal")
+        #print("diagonal")
         q0q1 = sqrt((x1-x0)**2+(y1-y0)**2)
         return q0q1
     
-def construct_A(a, N, rho_list, phi_list):
-    grid_size = (2*a)**2
-    cell_amount = N**2
-    cell_area = (2*a/N)**2 #area
-    cell_length = (2*a/N)
-    print(cell_length)
 
-    #for cell in cell_amount:
+def construct_A(a, N, rho_list, phi_list):
+    matrices = []
+
+    for laser in range(len(rho_list)):
+        rho = rho_list[laser]
+        phi = phi_list[laser]
+        cell_values = []  # Initialize cell_values inside the loop to reset it for each laser
+
+        for i in range(N):  # row
+            for j in range(N):  # col
+                length = get_length(i, j, a, N, rho, phi)
+                cell_values.append(length if length is not None else 0)
+
+        M = Matrix(N, N, cell_values)  # Create a matrix from the current list of cell values
+        matrices.append(M)  # Optionally store each matrix if you need to use all later
+        print(M)  # Printing the matrix of the current laser
+
+    return matrices  # Return the list of matrices if needed elsewhere
 
 
 
@@ -271,10 +285,9 @@ if __name__ == "__main__": # Run the code/functions from here
 
     #print(intersect_cell(2,2,2,4,0,pi/4))
 
-    #print(get_length(2,2,2,4,0,3*pi/4))
+    #print(get_length(2,2,2,4,0.1,5*pi/3))
 
-
-    construct_A(2, 3, [0.1,0.2,0.3], [pi/2,3*pi/2,5*pi/2])
+    construct_A(2, 4, [0.2,0.6,0.3,0.3], [4*pi/6,7*pi/4,8*pi/4,5*pi/4])
 
 
 
