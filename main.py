@@ -146,12 +146,13 @@ def opgave29_4():
 
 
 
-def intersect_cell(i,j,a,N,rho,phi):
 
-    x0 = a-((2*a*(i))/N)
-    x1 = a-((2*a*(i))/N)+(2*a/N)
-    y0 = a-((2*a*(j))/N)
-    y1 = a-((2*a*(j))/N)+(2*a/N)
+def intersect_cell(i,j,a,N,rho,phi):
+    
+    x0 = (2*a/N)*(i)-a
+    x1 = (2*a/N)*(i)-a+(2*a/N)
+    y0 = (2*a/N)*(j)-a
+    y1 = (2*a/N)*(j)-a+(2*a/N)
 
     x,y= symbols("x,y")
     eq = Eq(x*cos(phi)+y*sin(phi),rho)
@@ -188,17 +189,21 @@ def intersect_cell(i,j,a,N,rho,phi):
     
     return left, right, top, bottom, diagonal
     
+#intersect_cell(2,2,2,4,0.6,7*pi/4)
+#intersect_cell(0,3,2,4,0.3,5*pi/4)
     
+    
+
 
 def get_length(i, j, a, N, rho, phi):
 
     x,y= symbols("x,y")
     eq = Eq(x*cos(phi)+y*sin(phi),rho)
 
-    x0 = a-((2*a*(i))/N)
-    x1 = a-((2*a*(i))/N)+(2*a/N)
-    y0 = a-((2*a*(j))/N)
-    y1 = a-((2*a*(j))/N)+(2*a/N)
+    x0 = (2*a/N)*(i)-a
+    x1 = (2*a/N)*(i)-a+(2*a/N)
+    y0 = (2*a/N)*(j)-a
+    y1 = (2*a/N)*(j)-a+(2*a/N)
 
     if (len(solve(eq,y))!=0):
         # left intersection
@@ -219,6 +224,7 @@ def get_length(i, j, a, N, rho, phi):
         by = y0
 
     index = intersect_cell(i, j, a, N, rho, phi)
+    #print(index)
 
     if index[0] and index[1]:
         #print("left and right")
@@ -256,8 +262,11 @@ def get_length(i, j, a, N, rho, phi):
         return q0q1
     
 
+#print(get_length(0,2,2,4,0.3,5*pi/4))
+    
+
 def construct_A(a, N, rho_list, phi_list):
-    matrices = []
+    rows_of_A = []  # This will store each flattened matrix as a row
 
     for laser in range(len(rho_list)):
         rho = rho_list[laser]
@@ -270,10 +279,13 @@ def construct_A(a, N, rho_list, phi_list):
                 cell_values.append(length if length is not None else 0)
 
         M = Matrix(N, N, cell_values)  # Create a matrix from the current list of cell values
-        matrices.append(M)  # Optionally store each matrix if you need to use all later
-        print(M)  # Printing the matrix of the current laser
+        flattened_M = M.reshape(1, N*N)  # Flatten the matrix M to a single row
+        rows_of_A.append(flattened_M)  # Add the flattened matrix as a new row in the list
 
-    return matrices  # Return the list of matrices if needed elsewhere
+    # Now, create the final matrix A using the list of rows
+    A = Matrix(rows_of_A)  # Each element in rows_of_A is already a Matrix object
+
+    return A
 
 
 
@@ -287,8 +299,8 @@ if __name__ == "__main__": # Run the code/functions from here
 
     #print(get_length(2,2,2,4,0.1,5*pi/3))
 
-    construct_A(2, 4, [0.2,0.6,0.3,0.3], [4*pi/6,7*pi/4,8*pi/4,5*pi/4])
-
+    print(construct_A(2, 4, [0.2,0.6,0.3,0.3], [4*pi/6,7*pi/4,8*pi/4,5*pi/4]))
+    
 
 
     #---------------- Opgave 29 ----------------
